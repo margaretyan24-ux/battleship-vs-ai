@@ -22,5 +22,5 @@ Real bugs found and fixed while building and testing Battleship vs AI.
   - "Play again" fully reset the boards, battle log, lost ships, ship picker, rotation, and the Start battle button.
   - The next game had a new enemy fleet.
   - There were no console errors or failed requests.
-- **iPhone check:** Margaret ran her own checklist on an iPhone in Safari after the fix for bug 7, and everything worked with no remaining bugs.
+- **iPhone check:** Margaret tested on an iPhone in Safari and found bug #7. After the fix, she retested on her iPhone and confirmed the placement fix, firing, repeat shots, the turn status staying visible, and Play again all worked.
 - **Not tested:** a real screen reader.
