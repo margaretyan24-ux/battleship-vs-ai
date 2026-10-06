@@ -1,0 +1,13 @@
+{
+  "name": "battleship-vs-ai",
+  "version": "1.0.0",
+  "description": "Single-player Battleship in the browser against a hunt-and-target computer AI.",
+  "private": true,
+  "license": "MIT",
+  "scripts": {
+    "test": "node --test"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

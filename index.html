@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Battleship vs AI</title>
+  <meta name="description" content="Play Battleship in your browser against a hunt-and-target computer opponent.">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <a class="skip-link" href="#enemy-board">Skip to enemy board</a>
+  <header class="site-header">
+    <h1>Battleship <span>vs AI</span></h1>
+    <p id="status" class="status" role="status" aria-live="polite">Place your ships to begin.</p>
+  </header>
+
+  <main>
+    <section id="setup" class="panel setup" aria-labelledby="setup-title">
+      <h2 id="setup-title">Deploy your fleet</h2>
+      <p class="hint">Pick a ship, then click a square on your board to place its bow (top or left end). Click a placed ship to pick it up again. Use <kbd>R</kbd> to rotate and arrow keys to move around the board.</p>
+      <div id="ship-picker" class="ship-picker" role="radiogroup" aria-label="Ships to place"></div>
+      <div class="controls">
+        <button type="button" id="rotate-btn" class="btn">Rotate: <span id="orientation-label">Horizontal</span> <kbd>R</kbd></button>
+        <button type="button" id="random-btn" class="btn">Place randomly</button>
+        <button type="button" id="clear-btn" class="btn">Clear</button>
+        <button type="button" id="start-btn" class="btn btn-primary" disabled>Start battle</button>
+      </div>
+    </section>
+
+    <div class="boards">
+      <section class="panel board-panel" aria-labelledby="player-title">
+        <h2 id="player-title">Your fleet</h2>
+        <div id="player-board" class="board" role="group" aria-label="Your board"></div>
+        <div class="fleet-status">
+          <h3>Ships you've lost</h3>
+          <ul id="player-losses" class="ship-list"></ul>
+        </div>
+      </section>
+
+      <section class="panel board-panel" aria-labelledby="enemy-title">
+        <h2 id="enemy-title">Enemy waters</h2>
+        <div id="enemy-board" class="board" role="group" aria-label="Enemy board" tabindex="-1"></div>
+        <div class="fleet-status">
+          <h3>Enemy ships sunk</h3>
+          <ul id="enemy-losses" class="ship-list"></ul>
+        </div>
+      </section>
+    </div>
+
+    <section class="panel log-panel" aria-labelledby="log-title">
+      <h2 id="log-title">Battle log</h2>
+      <ol id="log" class="log" aria-live="polite" aria-relevant="additions"></ol>
+    </section>
+
+    <div class="legend" aria-hidden="true">
+      <span><i class="swatch ship"></i>Your ship</span>
+      <span><i class="swatch miss"></i>Miss</span>
+      <span><i class="swatch hit"></i>Hit</span>
+      <span><i class="swatch sunk"></i>Sunk</span>
+    </div>
+  </main>
+
+  <div id="result" class="result-backdrop" hidden>
+    <div class="result-dialog" role="dialog" aria-modal="true" aria-labelledby="result-title" aria-describedby="result-text">
+      <h2 id="result-title"></h2>
+      <p id="result-text"></p>
+      <button type="button" id="play-again-btn" class="btn btn-primary">Play again</button>
+    </div>
+  </div>
+
+  <script src="game.js"></script>
+  <script src="ui.js"></script>
+</body>
+</html>
