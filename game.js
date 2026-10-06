@@ -92,6 +92,25 @@
     return true;
   }
 
+  // Decides what a tap on the player's board does during setup.
+  // With a ship selected, the tap only ever tries to place that ship; a tap on
+  // another ship is a "no-fit", never a pick-up. With nothing selected, tapping a
+  // placed ship picks it up so it can be moved.
+  function setupTap(board, selectedId, row, col, orientation) {
+    if (!inBounds(row, col)) return { action: 'none' };
+    if (selectedId) {
+      if (placeShip(board, selectedId, row, col, orientation)) return { action: 'placed', id: selectedId };
+      return { action: 'no-fit', id: selectedId };
+    }
+    const occupant = board.occupancy[row][col];
+    if (occupant) {
+      const ship = getShip(board, occupant);
+      removeShip(board, occupant);
+      return { action: 'picked-up', id: occupant, orientation: ship.orientation };
+    }
+    return { action: 'none' };
+  }
+
   function clearBoard(board) {
     board.ships = [];
     board.occupancy = matrix(null);
@@ -386,7 +405,7 @@
   return {
     SIZE, COLUMNS, SHIPS, HORIZONTAL, VERTICAL,
     getShipDef, inBounds, coordLabel,
-    createBoard, shipCells, canPlace, placeShip, removeShip, clearBoard,
+    createBoard, shipCells, canPlace, placeShip, removeShip, clearBoard, setupTap,
     placeShipsRandomly, allShipsPlaced, getShip, isSunk, allSunk, sunkShips, receiveShot,
     createAI, chooseShot, recordResult,
     createGame, startBattle, playerFire, aiFire,

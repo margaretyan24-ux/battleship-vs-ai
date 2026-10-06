@@ -150,28 +150,21 @@
     if (game.phase !== 'setup') return;
     const at = cellFromEvent(e);
     if (!at) return;
-    const occupant = game.player.occupancy[at.row][at.col];
     const label = B.coordLabel(at.row, at.col);
+    const res = B.setupTap(game.player, selectedId, at.row, at.col, orientation);
+    const name = res.id ? B.getShipDef(res.id).name : '';
 
-    if (selectedId) {
-      const def = B.getShipDef(selectedId);
-      if (B.placeShip(game.player, selectedId, at.row, at.col, orientation)) {
-        statusOverride = `${def.name} placed at ${label}.`;
-        selectedId = nextUnplaced();
-        render();
-        return;
-      }
-    }
-    if (occupant) {
-      const ship = B.getShip(game.player, occupant);
-      B.removeShip(game.player, occupant);
-      selectedId = occupant;
-      orientation = ship.orientation;
-      statusOverride = `Picked up your ${ship.name}. Click a square to place it again.`;
-    } else if (selectedId) {
-      statusOverride = `The ${B.getShipDef(selectedId).name} doesn't fit at ${label}. Try another square or rotate.`;
+    if (res.action === 'placed') {
+      statusOverride = `${name} placed at ${label}.`;
+      selectedId = nextUnplaced();
+    } else if (res.action === 'no-fit') {
+      statusOverride = `The ${name} doesn't fit at ${label}. Try another square or rotate.`;
+    } else if (res.action === 'picked-up') {
+      selectedId = res.id;
+      orientation = res.orientation;
+      statusOverride = `Picked up your ${name}. Tap a square to place it again.`;
     } else {
-      statusOverride = 'All ships are placed. Click a ship to move it, or start the battle.';
+      statusOverride = 'All ships are placed. Tap a ship to move it, or start the battle.';
     }
     render();
   }

@@ -330,3 +330,32 @@ test('simulated full games through the game API always end with a winner', () =>
     assert.ok(game.winner === 'player' || game.winner === 'ai');
   }
 });
+
+test('setup tap on another ship while one is selected is a no-fit, not a pick-up', () => {
+  const board = B.createBoard();
+  B.placeShip(board, 'carrier', 0, 0, B.HORIZONTAL);
+  const before = JSON.stringify(board);
+  const res = B.setupTap(board, 'battleship', 0, 2, B.HORIZONTAL);
+  assert.deepEqual(res, { action: 'no-fit', id: 'battleship' });
+  assert.equal(JSON.stringify(board), before, 'carrier stays put and nothing else changes');
+  assert.equal(B.getShip(board, 'battleship'), null);
+});
+
+test('setup tap picks up a placed ship only when no ship is selected', () => {
+  const board = B.createBoard();
+  B.placeShip(board, 'carrier', 2, 3, B.VERTICAL);
+  assert.deepEqual(B.setupTap(board, null, 4, 3, B.HORIZONTAL),
+    { action: 'picked-up', id: 'carrier', orientation: B.VERTICAL });
+  assert.equal(B.getShip(board, 'carrier'), null);
+  assert.ok(board.occupancy.every((row) => row.every((v) => v === null)));
+  assert.deepEqual(B.setupTap(board, null, 4, 3, B.HORIZONTAL), { action: 'none' });
+});
+
+test('setup tap places or moves the selected ship when it fits', () => {
+  const board = B.createBoard();
+  assert.deepEqual(B.setupTap(board, 'carrier', 0, 0, B.HORIZONTAL), { action: 'placed', id: 'carrier' });
+  assert.deepEqual(B.setupTap(board, 'carrier', 0, 2, B.HORIZONTAL), { action: 'placed', id: 'carrier' });
+  assert.equal(B.getShip(board, 'carrier').col, 2);
+  assert.deepEqual(B.setupTap(board, 'destroyer', 0, 9, B.HORIZONTAL), { action: 'no-fit', id: 'destroyer' });
+  assert.deepEqual(B.setupTap(board, 'carrier', 10, 0, B.HORIZONTAL), { action: 'none' });
+});
