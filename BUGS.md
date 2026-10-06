@@ -10,6 +10,7 @@ Real bugs found and fixed while building and testing Battleship vs AI.
 | 4 | When placing a ship, the square under the pointer showed the hover blue instead of the green or red preview colour. | Setup screenshot at phone size. | Added hover rules that keep the preview colour. | Setup screenshots showing all squares green when the ship fits and red when it doesn't. |
 | 5 | `npm test` crashed with "Cannot find module" instead of running the tests, because Node 24 treated `node --test test/` as a file to load. | Running `npm test` for the first time. | Changed the script to `node --test`, which finds `test/*.test.js` automatically. | `npm test` runs every test (27 passing now). |
 | 6 | The live site logged a 404 error on every load because the browser asked for a tab icon (`/favicon.ico`) that didn't exist. | Console error during browser testing of the live site, then confirmed in a clean browser profile. | Added a tab icon (`favicon.svg`, `favicon-32.png`) and an iPhone home-screen icon (`apple-touch-icon.png`), linked from `index.html`. | All icon files load on the live site, and fresh loads plus a full live game show no 404s or console errors. |
+| 7 | During setup, tapping a placed ship while another ship was selected picked up the placed ship instead of saying the new one doesn't fit (for example, tapping the Carrier with the Battleship selected). | Margaret's testing on an iPhone in Safari. | With a ship selected, a tap now only places that ship or says it doesn't fit; picking up a placed ship only happens when no ship is selected. The setup hint now explains how to move a ship. | 3 new unit tests, including the exact steps; same steps on the live site before and after the fix (phone-sized browser, touch taps); iPhone check in Safari. |
 
 ## Final test results
 
@@ -21,5 +22,5 @@ Real bugs found and fixed while building and testing Battleship vs AI.
   - "Play again" fully reset the boards, battle log, lost ships, ship picker, rotation, and the Start battle button.
   - The next game had a new enemy fleet.
   - There were no console errors or failed requests.
-- **iPhone check:** Margaret ran her own checklist on an iPhone in Safari, and everything worked with no remaining bugs.
+- **iPhone check:** Margaret ran her own checklist on an iPhone in Safari after the fix for bug 7, and everything worked with no remaining bugs.
 - **Not tested:** a real screen reader.
