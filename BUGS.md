@@ -12,6 +12,13 @@ Real bugs found and fixed while building and testing Battleship vs AI.
 | 6 | The live site logged a 404 error on every load because the browser asked for a tab icon (`/favicon.ico`) that didn't exist. | Console error during browser testing of the live site, then confirmed in a clean browser profile. | Added a tab icon (`favicon.svg`, `favicon-32.png`) and an iPhone home-screen icon (`apple-touch-icon.png`), linked from `index.html`. | All icon files load on the live site, and fresh loads plus a full live game show no 404s or console errors. |
 | 7 | On a real iPhone in Safari, tapping a placed ship while a different ship was selected picked up the placed ship instead of showing a "doesn't fit" message (for example, tapping the Carrier with the Battleship selected). | Margaret found it during her iPhone testing in Safari. | Root cause: when the selected ship didn't fit, the tap handler in `ui.js` fell through to its "pick up the tapped ship" step. Fixed in commit [040ff02](https://github.com/margaretyan24-ux/battleship-vs-ai/commit/040ff02): the tap logic moved to `setupTap` in `game.js`. With a ship selected, a tap now only places that ship or shows "doesn't fit"; a placed ship is picked up only when no ship is selected. The setup hint now explains how to move a ship. | Three new unit tests: "setup tap on another ship while one is selected is a no-fit, not a pick-up" (the exact steps), "setup tap picks up a placed ship only when no ship is selected", and "setup tap places or moves the selected ship when it fits". Also the same steps on the live site before and after the fix, and Margaret's iPhone retest. |
 
+### Bug #7 screenshots (iPhone, Safari)
+
+| Before | After |
+|--------|-------|
+| ![Before: tapping the Carrier picked it up](screenshots/bug7-before.png) | ![After: the Destroyer shows a "doesn't fit" message instead of picking up a ship](screenshots/bug7-after.png) |
+| Before: tapping the Carrier picked it up. | After: the Destroyer shows a "doesn't fit" message instead of picking up a ship. |
+
 ## Final test results
 
 - **Unit tests:** `npm test` has 27 passing, 0 failing. They cover ship placement, overlap and edge rules, repeat shots, sinking, game over, turn order, setup taps, the AI never repeating a shot, and 2,000 simulated full AI games. Every game finished, averaging about 50 shots with a worst case of 66.
